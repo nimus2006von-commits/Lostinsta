@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.Direkt" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#12121A</item>
+        <item name="android:statusBarColor">#12121A</item>
+        <item name="android:navigationBarColor">#12121A</item>
+    </style>
+</resources>

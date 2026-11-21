@@ -23,6 +23,24 @@ PWA zahteva obisk prek HTTPS (npr. GitHub Pages, Netlify ali podobna statična g
 4. **iPhone (Safari):** Deli → *Dodaj na domači zaslon*.
 5. Namesto Instagram aplikacije odpiraj to ikono.
 
+## Android aplikacija (Direkt Browser)
+
+Mapa `android/` vsebuje pravo Android aplikacijo (Kotlin), ki Instagram odpre
+znotraj sebe in **blokira home feed, Reels in Explore**:
+
+- ob zagonu odpri `instagram.com/direct/inbox` (sporočila),
+- vsak poskus obiska naslovne strani, `/reel(s)` ali `/explore` samodejno
+  preusmeri nazaj na sporočila,
+- prijava v Instagram ostane shranjena v aplikaciji (piškotki).
+
+APK zgradi GitHub Actions delovni tok (`.github/workflows/build-apk.yml`):
+
+1. Na GitHubu odpri **Actions → Build Android APK → Run workflow**
+   (ali poisči zadnji zagon, ki ga je sprožil push).
+2. Pod zagonom v razdelku **Artifacts** prenesi `direkt-apk`.
+3. Na telefonu odpri preneseno datoteko in dovoli *namestitev iz neznanih virov*
+   (enkratna nastavitev).
+
 ## Testiranje lokalno
 
 Service worker ne deluje prek `file://`, zato uporabi lokalni strežnik:
