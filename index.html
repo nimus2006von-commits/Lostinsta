@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#12121a">
+  <meta name="description" content="Direkten dostop do Instagram sporočil in stories brez feeda.">
+  <title>Direkt — Instagram brez feeda</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Direkt</h1>
+      <p class="subtitle">Instagram sporočila in stories — brez feeda.</p>
+    </header>
+
+    <section class="stats" id="stats">
+      <div class="stat">
+        <span class="stat-value" id="stat-today">0</span>
+        <span class="stat-label">odprtij danes</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value" id="stat-people">0</span>
+        <span class="stat-label">ljudi na seznamu</span>
+      </div>
+    </section>
+
+    <section class="add-person">
+      <h2>Dodaj osebo</h2>
+      <form id="add-form">
+        <label>
+          <span>Ime</span>
+          <input type="text" id="input-name" placeholder="npr. Ana" maxlength="40" autocomplete="off" required>
+        </label>
+        <label>
+          <span>Instagram uporabniško ime</span>
+          <input type="text" id="input-username" placeholder="brez @, npr. ana_um" maxlength="30" autocomplete="off" autocapitalize="none" required>
+        </label>
+        <button type="submit" class="btn btn-primary">Dodaj na seznam</button>
+      </form>
+    </section>
+
+    <section class="people">
+      <div class="people-header">
+        <h2>Moji ljudje</h2>
+        <div class="actions">
+          <button type="button" class="btn btn-ghost" id="btn-export">Izvozi</button>
+          <button type="button" class="btn btn-ghost" id="btn-import">Uvozi</button>
+          <input type="file" id="import-file" accept="application/json" hidden>
+        </div>
+      </div>
+      <ul id="people-list" class="people-list"></ul>
+      <p id="empty-state" class="empty-state" hidden>
+        Seznam je prazen. Dodaj osebe, s katerimi želiš komunicirati, brez da vidiš feed.
+      </p>
+    </section>
+
+    <section class="how-it-works">
+      <h2>Kako deluje</h2>
+      <ul>
+        <li><strong>Sporočilo</strong> odpre pogovor direktno prek povezave, ki vodi v zasebna sporočila.</li>
+        <li><strong>Story</strong> odpre story te osebe direktno, brez domače strani.</li>
+        <li>Feed, Reels in Explore se odprejo le, če to namenoma poiščeš sama/sam.</li>
+        <li>Vsi podatki ostanejo na tvoji napravi.</li>
+      </ul>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
