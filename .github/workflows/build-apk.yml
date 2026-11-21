@@ -8,6 +8,9 @@ on:
       - "android/**"
       - ".github/workflows/build-apk.yml"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,9 +29,22 @@ jobs:
       - name: Build debug APK
         run: gradle -p android --no-daemon assembleDebug
 
-      - name: Upload APK
+      - name: Copy APK with clean name
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk Direkt-1.0.apk
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: direkt-apk
-          path: android/app/build/outputs/apk/debug/*.apk
+          path: Direkt-1.0.apk
           if-no-files-found: error
+
+      - name: Publish APK as release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete v1.0 --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          gh release create v1.0 Direkt-1.0.apk \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Direkt v1.0" \
+            --notes "Instagram brez feeda: sporočila, profili in stories; home feed, Reels in Explore so blokirani."
