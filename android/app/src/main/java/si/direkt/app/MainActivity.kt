@@ -2,8 +2,12 @@ package si.direkt.app
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.webkit.CookieManager
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -12,10 +16,12 @@ import java.net.URI
 
 private const val START_URL = "https://www.instagram.com/direct/inbox"
 private const val FALLBACK_URL = "https://www.instagram.com/direct/inbox"
+private const val FILE_CHOOSER_REQUEST = 1001
 
 class MainActivity : Activity() {
 
     private lateinit var web: WebView
+    private var filePathCallback: ValueCallback<Array<Uri>>? = null
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,11 +42,47 @@ class MainActivity : Activity() {
         CookieManager.getInstance().setAcceptThirdPartyCookies(web, true)
 
         web.webViewClient = DirektWebViewClient()
+        web.webChromeClient = object : WebChromeClient() {
+            override fun onShowFileChooser(
+                webView: WebView?,
+                callback: ValueCallback<Array<Uri>>,
+                fileChooserParams: FileChooserParams
+            ): Boolean {
+                filePathCallback?.onReceiveValue(null)
+                filePathCallback = callback
+                val intent = fileChooserParams.createIntent().apply {
+                    type = "image/*"
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                }
+                return try {
+                    startActivityForResult(intent, FILE_CHOOSER_REQUEST)
+                    true
+                } catch (e: android.content.ActivityNotFoundException) {
+                    filePathCallback = null
+                    false
+                }
+            }
+        }
 
         if (savedInstanceState == null) {
             web.loadUrl(START_URL)
         } else {
             web.restoreState(savedInstanceState)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == FILE_CHOOSER_REQUEST) {
+            val callback = filePathCallback
+            filePathCallback = null
+            val results = if (resultCode == RESULT_OK && data != null) {
+                WebChromeClient.FileChooserParams.parseResult(resultCode, data)
+            } else {
+                null
+            }
+            callback?.onReceiveValue(results ?: arrayOf<Uri>())
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
